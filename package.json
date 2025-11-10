@@ -1,0 +1,33 @@
+{
+  "name": "frontend-smartstay",
+  "private": true,
+  "version": "2.0.0",
+  "description": "It's a web application for SmartStay hotel management system.",
+  "author": "SmartStay - Edgerunners Application Web",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "@primeuix/themes": "^1.2.3",
+    "@primevue/themes": "^4.4.1",
+    "axios": "^1.12.2",
+    "chart.js": "^4.5.1",
+    "pinia": "^3.0.3",
+    "primeflex": "^4.0.0",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.3.9",
+    "vue": "^3.5.21",
+    "vue-i18n": "^11.1.12",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "json-server": "^0.17.4",
+    "vite": "^7.1.7"
+  }
+}
