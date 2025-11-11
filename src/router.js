@@ -3,12 +3,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 // --- 1. Import Module Route Definitions ---
-import authRoutes from './modules/auth/presentation/routes.js'; // Contiene /login, /register, /admin/auth/users
-import dashboardRoutes from './modules/dashboard/presentation/routes.js'; // Contiene /dashboard (redirector) y /admin/dashboard, etc.
-import propertyRoutes from './modules/property/presentation/routes.js'; // Contiene /admin/property/rooms, /guest/property/list, etc.
-import bookingRoutes from './modules/booking/presentation/routes.js'; // Contiene /guest/booking/my-list, /guest/booking/review
-import staffRoutes from './modules/staff/presentation/routes.js';
-import guestRoutes from './modules/guest/presentation/routes.js';
+import {iamRoutes} from "./modules/iam/presentation/iam-routes.js";
 
 const PageNotFound = () => import('./shared/presentation/views/page-not-found.vue');
 
@@ -16,12 +11,7 @@ const PageNotFound = () => import('./shared/presentation/views/page-not-found.vu
 // --- 3. Combine All Route Definitions ---
 const routes = [
     // Spread routes imported from feature modules first.
-    ...authRoutes,
-    ...dashboardRoutes,
-    ...propertyRoutes,
-    ...bookingRoutes,
-    ...staffRoutes,
-    ...guestRoutes,
+    ...iamRoutes,
 
     {
         path: '/',
