@@ -13,7 +13,6 @@ import { UpdateRoomUseCase } from '../update-room.usecase.js';
 import { DeleteRoomUseCase } from '../delete-room.usecase.js';
 import { CreateTaskUseCase } from '../create-task.usecase.js';
 import { UpdateTaskStatusUseCase } from '../update-task-status.usecase.js';
-// (Y así sucesivamente para DeleteTask, UpdateTask, etc.)
 
 // --- Inyección de Dependencias Manual ---
 const propertyRepository = new PropertyApiRepository();
@@ -47,7 +46,12 @@ export const usePropertyStore = defineStore('property', () => {
     const enrichedRooms = computed(() => {
         if (!rooms.value.length || !properties.value.length) return rooms.value;
         return rooms.value.map(room => {
-            const property = properties.value.find(p => p.id === room.propertyId);
+
+            const property =
+                properties.value.find(
+                    p => p.id === room.propertyId
+                );
+
             return {
                 ...room,
                 propertyName: property?.name || 'Hotel Desconocido'
@@ -143,6 +147,9 @@ export const usePropertyStore = defineStore('property', () => {
         await updateTaskStatusUseCase.execute(taskId, newStatus);
         await fetchStaffData(staffId); // Recargar
     }
+
+    console.log('propertyStore.properties inicial:', getPropertyListQuery());
+    console.log('propertyStore.rooms inicial:', getRoomListQuery());
 
     return {
         // State

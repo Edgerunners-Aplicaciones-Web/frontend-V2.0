@@ -1,6 +1,6 @@
 // src/modules/property/application/create-room.usecase.js
 
-import { IPropertyRepository } from '../domain/model/repositories/i-property-repository.js';
+import { IPropertyRepository } from '../domain/repositories/i-property-repository.js';
 import { Room } from '../domain/model/Room.entity.js';
 
 export class CreateRoomUseCase {

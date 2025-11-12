@@ -1,28 +1,14 @@
 // src/modules/analytics/infrastructure/repositories/analytics-repository.js
 
-import { IAnalyticsRepository } from '../../domain/repositories/IAnalyticsRepository.js';
+import { IAnalyticsRepository } from '../../domain/repositories/i-analytics-repository.js';
 
 // --- Dependencias de OTROS Bounded Contexts ---
-// (¡El "Pase Químico" entre contextos!)
-import { PropertyApiRepository } from '../../../property/infrastructure/repositories/PropertyApi.repository.js';
-import { UserApiRepository } from '../../../iam/infrastructure/UserApi.repository.js';
-import { ProfileApiRepository } from '../../../iam/infrastructure/ProfileApi.repository.js';
-// Asumiremos que existe un BookingApiRepository del futuro Bounded Context 'Booking'
-// import { BookingApiRepository } from '../../../booking/infrastructure/repositories/BookingApi.repository.js';
+import { PropertyApiRepository } from '../../../property/infrastructure/repositories/property-api.repository.js';
+import { UserApiRepository } from '../../../iam/infrastructure/repositories/user-api.repository.js';
+import { ProfileApiRepository } from '../../../iam/infrastructure/repositories/profile-api.repository.js';
 
-// --- Repositorio Falso de Booking (Temporal) ---
-// (Borra esto cuando tengas el Bounded Context 'Booking' real)
-class FakeBookingApiRepository {
-    async getAllBookings() {
-        console.warn("Analytics.repository: Usando FakeBookingApiRepository.getAllBookings");
-        return [];
-    }
-    async getMyBookings(guestId) {
-        console.warn("Analytics.repository: Usando FakeBookingApiRepository.getMyBookings");
-        return [];
-    }
-}
-// --- Fin del Falso ---
+import { OperationsApiRepository } from '../../../operations/infrastructure/repositories/operations-api.repository.js';
+import { BookingApiRepository } from '../../../booking/infrastructure/repositories/booking-api-repository.js';
 
 
 export class AnalyticsApiRepository extends IAnalyticsRepository {
@@ -34,22 +20,21 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
         this.userRepo = new UserApiRepository();
         this.profileRepo = new ProfileApiRepository();
 
-        // USA EL REPOSITORIO FALSO POR AHORA
-        this.bookingRepo = new FakeBookingApiRepository();
-        // CUANDO ESTÉ LISTO, CÁMBIALO POR:
-        // this.bookingRepo = new BookingApiRepository();
+        // ¡"Fichajes" CORREGIDOS!
+        this.bookingRepo = new BookingApiRepository();
+        this.operationsRepo = new OperationsApiRepository(); // ¡Nuevo "fichaje"!
     }
 
     /**
      * Implementación de la Metavisión del Admin.
-     * (Lógica movida desde AdminDashboard.vue v1)
      */
     async getAdminStats() {
         try {
+            // ¡"Pases" a los equipos correctos!
             const [roomsData, profilesData, bookingsData] = await Promise.all([
-                this.propertyRepo.getRooms(),
-                this.profileRepo.getAllProfiles(),
-                this.bookingRepo.getAllBookings()
+                this.propertyRepo.getRooms(), // Correcto
+                this.profileRepo.getAllProfiles(), // Correcto
+                this.bookingRepo.getAllBookings() // Correcto
             ]);
 
             const stats = {
@@ -69,13 +54,17 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
             const todayStart = new Date();
             todayStart.setHours(0, 0, 0, 0);
             stats.bookingsToday = bookingsData.filter(b => {
-                const bookingDate = new Date(b.createdAt); // Asumiendo 'createdAt'
+                const bookingDate = new Date(b.createdAt);
                 return bookingDate >= todayStart;
             }).length;
 
             // 4. Tasa Ocupación
             if (stats.rooms > 0) {
-                const occupiedRooms = roomsData.filter(r => r.isOccupied()).length;
+                // ¡"Falla de Química" CORREGIDA!
+                // La API de /rooms devuelve JSON, no entidades.
+                // ¡La entidad Room.js tiene el método isOccupied(), pero el JSON no!
+                // Debemos usar la lógica de v1 'PropertyService' aquí:
+                const occupiedRooms = roomsData.filter(r => r.status === 'occupied').length; // ¡Lógica de v1!
                 stats.occupancyRate = Math.round((occupiedRooms / stats.rooms) * 100);
             }
 
@@ -89,32 +78,30 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
 
     /**
      * Implementación de la Metavisión del Huésped.
-     * (Lógica movida desde useGuestDashboard.js v1)
      */
     async getGuestStats(guestId) {
         if (!guestId) throw new Error("Guest ID es requerido para getGuestStats");
 
         try {
-            // [TÁCTICA MODIFICADA]
             const [userBookings, allProperties, allRooms] = await Promise.all([
-                this.bookingRepo.getMyBookings(guestId), // Solo las del Guest
-                this.propertyRepo.getProperties(), // Todas las propiedades
-                this.propertyRepo.getRooms() // Todas las habitaciones (para imágenes)
-                // guestSvc.getActiveServices(guestId) // (Omitido por ahora)
+                this.bookingRepo.getBookingsByGuestId(guestId), // Correcto
+                this.propertyRepo.getProperties(), // Correcto
+                this.propertyRepo.getRooms() // Correcto
             ]);
 
             const services = []; // (Temporal)
 
-            // 1. Procesa las reservas (para "Upcoming Bookings")
+            // 1. Procesa "Upcoming Bookings" (Lógica de v1)
             const upcomingBookings = (Array.isArray(userBookings) ? userBookings : [])
-                .filter(b => new Date(b.checkOut) >= Date.now()) // Activas o futuras
+                .filter(b => new Date(b.checkOut) >= Date.now())
                 .map(b => {
                     const prop = allProperties.find(p => p.id === b.propertyId);
+                    // ¡"Pase Químico" entre Booking y Property!
                     return { ...b, propertyName: prop ? prop.name : 'Propiedad Desconocida' };
                 })
                 .sort((a, b) => new Date(a.checkIn) - new Date(b.checkIn));
 
-            // 2. Procesa las "Propiedades Recientes"
+            // 2. Procesa "Propiedades Recientes" (Lógica de v1)
             const recentProperties = (Array.isArray(userBookings) ? userBookings : [])
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .map(booking => {
@@ -130,7 +117,7 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
                 .filter((prop, index, self) => index === self.findIndex((p) => p.id === prop.id))
                 .slice(0, 3);
 
-            // 3. Recomendaciones
+            // 3. Recomendaciones (Lógica de v1)
             const bookedPropertyIds = new Set(userBookings.map(b => b.propertyId));
             const recommendations = allProperties
                 .filter(p => !bookedPropertyIds.has(p.id))
@@ -141,7 +128,7 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
                     propertyId: p.id
                 }));
 
-            // 4. Stats Simples
+            // 4. Stats Simples (Lógica de v1)
             const simpleStats = {
                 upcoming: upcomingBookings.length,
                 services: services.length,
@@ -157,13 +144,16 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
 
     /**
      * Implementación de la Metavisión del Staff.
-     * (Lógica movida desde PropertyService.js v1)
      */
     async getStaffStats(staffId, period = 'week', t) {
         if (!staffId) return { kpi: { daily: 0, weekly: 0, monthly: 0, yearly: 0 }, chartData: {} };
 
-        // Esta lógica depende 100% del 'Property' Bounded Context
-        const tasks = await this.propertyRepo.getTasks(staffId);
+        // ¡"PASE" AL EQUIPO CORRECTO!
+        // Ya no usamos 'propertyRepo.getTasks', usamos 'operationsRepo.getTasks'
+        const tasks = await this.operationsRepo.getTasks(staffId);
+
+        // ¡"Falla de Química" CORREGIDA!
+        // El repo devuelve Entidades Task, que SÍ tienen el método .isCompleted()
         const completedTasks = tasks.filter(t => t.isCompleted() && t.completedAt);
 
         const kpi = { daily: 0, weekly: 0, monthly: 0, yearly: 0 };
@@ -171,7 +161,6 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
         // --- Lógica de KPI (Corregida) ---
         const today_clean = new Date();
         const todayStart_clean = new Date(today_clean.getFullYear(), today_clean.getMonth(), today_clean.getDate());
-        // ... (resto de la lógica de fechas de v1) ...
         const week_clean = new Date();
         const dayOfWeek_clean = week_clean.getDay();
         const diff_clean = week_clean.getDate() - dayOfWeek_clean + (dayOfWeek_clean === 0 ? -6 : 1);
@@ -182,7 +171,7 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
         const yearStart_clean = new Date(year_clean.getFullYear(), 0, 1);
 
         for (const task of completedTasks) {
-            const completedDate = new Date(task.completedAt);
+            const completedDate = task.completedAt; // ¡Ya es un objeto Date!
             if (completedDate >= todayStart_clean) kpi.daily++;
             if (completedDate >= weekStart_clean) kpi.weekly++;
             if (completedDate >= monthStart_clean) kpi.monthly++;
@@ -193,22 +182,45 @@ export class AnalyticsApiRepository extends IAnalyticsRepository {
         const chartData = { labels: [], datasets: [{ label: t('tasks.filterCompleted'), data: [], backgroundColor: '#1ABC9C', borderColor: '#1ABC9C' }] };
         const dataMap = new Map();
 
-        // ... (Toda la lógica del switch/case de 'period' de tu v1 'PropertyService.js' va aquí) ...
-        // (Omitido por brevedad, pero es un copy-paste directo de tu v1)
         switch (period) {
             case 'today':
                 chartData.labels = ['0-3', '3-6', '6-9', '9-12', '12-15', '15-18', '18-21', '21-24'];
                 chartData.labels.forEach(l => dataMap.set(l, 0));
                 completedTasks
-                    .filter(t => new Date(t.completedAt) >= todayStart_clean)
+                    .filter(t => t.completedAt >= todayStart_clean)
                     .forEach(t => {
-                        const hour = new Date(t.completedAt).getHours();
+                        const hour = t.completedAt.getHours(); // ¡Ya es Date!
                         const bucket = Math.floor(hour / 3);
                         const label = chartData.labels[bucket];
                         dataMap.set(label, dataMap.get(label) + 1);
                     });
                 break;
-            // ... (casos 'month', 'year', 'week' de v1)
+            case 'month':
+                chartData.labels = [t('tasks.week') + ' 1', t('tasks.week') + ' 2', t('tasks.week') + ' 3', t('tasks.week') + ' 4+'];
+                chartData.labels.forEach(l => dataMap.set(l, 0));
+                completedTasks
+                    .filter(t => t.completedAt >= monthStart_clean)
+                    .forEach(t => {
+                        const dayOfMonth = t.completedAt.getDate(); // ¡Ya es Date!
+                        let label;
+                        if (dayOfMonth <= 7) label = chartData.labels[0];
+                        else if (dayOfMonth <= 14) label = chartData.labels[1];
+                        else if (dayOfMonth <= 21) label = chartData.labels[2];
+                        else label = chartData.labels[3];
+                        dataMap.set(label, dataMap.get(label) + 1);
+                    });
+                break;
+            case 'year':
+                chartData.labels = [t('tasks.monthJan'), t('tasks.monthFeb'), t('tasks.monthMar'), t('tasks.monthApr'), t('tasks.monthMay'), t('tasks.monthJun'), t('tasks.monthJul'), t('tasks.monthAug'), t('tasks.monthSep'), t('tasks.monthOct'), t('tasks.monthNov'), t('tasks.monthDec')];
+                chartData.labels.forEach(l => dataMap.set(l, 0));
+                completedTasks
+                    .filter(t => t.completedAt >= yearStart_clean)
+                    .forEach(t => {
+                        const month = t.completedAt.getMonth(); // ¡Ya es Date!
+                        const label = chartData.labels[month];
+                        dataMap.set(label, dataMap.get(label) + 1);
+                    });
+                break;
             default: // 'week'
                 const dayLabels = [t('tasks.day6'), t('tasks.day5'), t('tasks.day4'), t('tasks.day3'), t('tasks.day2'), t('tasks.day1'), t('tasks.filterToday')];
                 for (let i = 6; i >= 0; i--) {

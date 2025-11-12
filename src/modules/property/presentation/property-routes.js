@@ -1,11 +1,11 @@
 // src/modules/property/presentation/property-routes.js
 
-import AdminManageRooms from './views/AdminManageRooms.view.vue';
-import GuestRoomList from './views/GuestRoomList.view.vue';
-import StaffRoomCleaningList from './views/StaffRoomCleaningList.view.vue';
-import StaffTaskList from './views/StaffTaskList.view.vue';
+import AdminManageRooms from './views/admin-manage-rooms-view.vue';
+import GuestRoomList from './views/guest-room-list-view.vue';
+import StaffRoomCleaningList from './views/staff-room-cleaning-list-view.vue';
+import StaffTaskList from './views/staff-task-list.view.vue';
 
-export default [
+export const propertyRoutes = [
     {
         path: '/admin/property/rooms',
         name: 'admin-manage-rooms',
@@ -13,7 +13,6 @@ export default [
         meta: { requiresAuth: true, roles: ['admin'] }
     },
     {
-        // Renombrado desde '/guest/property/list'
         path: "/guest/rooms",
         name: "guest-rooms-list",
         component: GuestRoomList,

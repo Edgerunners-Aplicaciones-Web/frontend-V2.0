@@ -1,6 +1,6 @@
 // src/modules/property/application/create-task.usecase.ts
 
-import { IPropertyRepository } from '../domain/model/repositories/i-property-repository.js';
+import { IPropertyRepository } from '../domain/repositories/i-property-repository.js';
 import { Task } from '../domain/model/Task.entity.js';
 
 export class CreateTaskUseCase {

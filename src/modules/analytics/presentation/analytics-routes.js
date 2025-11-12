@@ -4,12 +4,7 @@ import AdminDashboard from './views/admin-dashboard-view.vue';
 import StaffDashboard from './views/staff-dashboard-view.vue';
 import GuestDashboard from './views/guest-dashboard-view.vue';
 
-// Asumimos que la vista de perfil se moverá a su propio módulo 'Profile'
-// Por ahora, lo importamos desde la v1 (ruta ajustada)
-import AdminProfile from "../../Profile/presentation/views/AdminProfile.vue";
-
-export const analyticsRoutes = [ // Renombrado a analyticsRoutes
-    // --- Ruta Central de Redirección (Lógica idéntica a v1) ---
+export const analyticsRoutes = [
     {
         path: '/dashboard',
         name: 'dashboard',
@@ -57,11 +52,5 @@ export const analyticsRoutes = [ // Renombrado a analyticsRoutes
         name: 'guest-dashboard',
         component: GuestDashboard,
         meta: { requiresAuth: true, roles: ['guest', 'admin'] }
-    },
-    {
-        path: '/admin/profile',
-        name: 'admin-profile',
-        component: AdminProfile, // (Este componente deberá ser movido/refactorizado eventualmente)
-        meta: { requiresAuth: true, roles: ['admin'] }
     },
 ];

@@ -1,6 +1,6 @@
 // src/modules/property/application/update-task-status.usecase.js
 
-import { IPropertyRepository } from '../domain/model/repositories/i-property-repository.js';
+import { IPropertyRepository } from '../domain/repositories/i-property-repository.js';
 
 export class UpdateTaskStatusUseCase {
     constructor(propertyRepository) {

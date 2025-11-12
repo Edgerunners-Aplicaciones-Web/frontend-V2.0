@@ -1,6 +1,6 @@
 // src/modules/property/application/delete-room.usecase.js
 
-import { IPropertyRepository } from '../domain/model/repositories/i-property-repository.js';
+import { IPropertyRepository } from '../domain/repositories/i-property-repository.js';
 
 export class DeleteRoomUseCase {
     constructor(propertyRepository) {

@@ -1,6 +1,6 @@
 // src/modules/property/infrastructure/repositories/property-api.repository.js
 
-import { IPropertyRepository } from "../../domain/model/repositories/i-property-repository.js";
+import { IPropertyRepository } from "../../domain/repositories/i-property-repository.js";
 import { propertyApi } from "../api/property-api.js";
 import { PropertyAssembler } from "../assemblers/property.assembler.js";
 import { RoomAssembler } from "../assemblers/room.assembler.js";

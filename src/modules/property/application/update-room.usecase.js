@@ -1,6 +1,6 @@
 // src/modules/property/application/update-room.usecase.js
 
-import { IPropertyRepository } from '../domain/model/repositories/i-property-repository.js';
+import { IPropertyRepository } from '../domain/repositories/i-property-repository.js';
 
 export class UpdateRoomUseCase {
     constructor(propertyRepository) {
