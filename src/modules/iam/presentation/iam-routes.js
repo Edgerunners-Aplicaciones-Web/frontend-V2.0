@@ -5,7 +5,7 @@ import RegisterView from "./views/register-view.vue";
 import AdminManageUsers from './views/admin-manage-users-view.vue';
 import AdminEditUser from './views/admin-edit-user-view.vue';
 import AdminAddUser from "./views/admin-add-user-view.vue";
-import AdminProfile from "../../profile/presentation/views/admin-profile-view.vue";
+import AdminProfile from "../../profiles/presentation/views/admin-profile-view.vue";
 
 export const iamRoutes = [
     {
@@ -51,7 +51,7 @@ export const iamRoutes = [
         meta: { requiresAuth: true, roles: ['admin'] }
     },
     {
-        path: '/admin/profile',
+        path: '/admin/profiles',
         name: 'admin-profile',
         component: AdminProfile,
         meta: { requiresAuth: true, roles: ['admin'] }

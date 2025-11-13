@@ -3,12 +3,12 @@
 import { IAnalyticsRepository } from '../../domain/repositories/i-analytics-repository.js';
 
 // --- Dependencias de OTROS Bounded Contexts ---
-import { PropertyApiRepository } from '../../../property/infrastructure/repositories/property-api.repository.js';
+import { PropertyApiRepository } from '../../../properties/infrastructure/repositories/property-api.repository.js';
 import { UserApiRepository } from '../../../iam/infrastructure/repositories/user-api.repository.js';
-import { ProfileApiRepository } from '../../../profile/infrastructure/repositories/profile-api.repository.js';
+import { ProfileApiRepository } from '../../../profiles/infrastructure/repositories/profile-api.repository.js';
 
 import { OperationsApiRepository } from '../../../operations/infrastructure/repositories/operations-api.repository.js';
-import { BookingApiRepository } from '../../../booking/infrastructure/repositories/booking-api-repository.js';
+import { BookingApiRepository } from '../../../bookings/infrastructure/repositories/booking-api-repository.js';
 
 
 export class AnalyticsApiRepository extends IAnalyticsRepository {

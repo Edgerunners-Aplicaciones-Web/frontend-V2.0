@@ -3,10 +3,10 @@ import { createRouter, createWebHistory } from "vue-router";
 // --- 1. Importa a TODOS tus "Equipos" (Módulos) ---
 import { iamRoutes } from "./modules/iam/presentation/iam-routes.js";
 import { analyticsRoutes } from "./modules/analytics/presentation/analytics-routes.js";
-import { propertyRoutes } from "./modules/property/presentation/property-routes.js";
+import { propertyRoutes } from "./modules/properties/presentation/property-routes.js";
 import { operationsRoutes } from "./modules/operations/presentation/operations-routes.js";
-import { bookingRoutes } from "./modules/booking/presentation/booking-routes.js";
-// (Añadí bookingRoutes asumiendo que el archivo se llama 'booking-routes.js')
+import { bookingRoutes } from "./modules/bookings/presentation/booking-routes.js";
+// (Añadí bookingRoutes asumiendo que el archivo se llama 'bookings-routes.js')
 
 const PageNotFound = () => import('./shared/presentation/views/page-not-found.vue');
 

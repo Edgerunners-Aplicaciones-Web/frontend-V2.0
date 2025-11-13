@@ -4,16 +4,16 @@ import { useRouter } from 'vue-router';
 
 // --- Importar Casos de Uso y Consultas ---
 import { LoginUseCase } from '../login.usecase.js';
-import { CreateUserWithProfileUseCase } from '../../../profile/application/create-user-with-profile.usecase.js';
+import { CreateUserWithProfileUseCase } from '../../../profiles/application/create-user-with-profile.usecase.js';
 import { DeleteUserUseCase } from '../delete-user.usecase.js';
-import { GetStaffDetailsQuery } from '../../../profile/application/get-staff-details.query.js';
+import { GetStaffDetailsQuery } from '../../../profiles/application/get-staff-details.query.js';
 
 // --- Importar Servicios y Repositorios (Inyección de Dependencias) ---
 import { IAMService } from '../../domain/services/IAM.service.js';
 import { UserApiRepository } from '../../infrastructure/repositories/user-api.repository.js';
-import { ProfileApiRepository } from '../../../profile/infrastructure/repositories/profile-api.repository.js';
+import { ProfileApiRepository } from '../../../profiles/infrastructure/repositories/profile-api.repository.js';
 //TODO: Importar repositorio de otro Bounded Context cuando esté implementado
-import { PropertyApiRepository } from '../../../property/infrastructure/repositories/property-api.repository.js'; // Repositorio del otro Bounded Context
+import { PropertyApiRepository } from '../../../properties/infrastructure/repositories/property-api.repository.js'; // Repositorio del otro Bounded Context
 
 // --- Inyección de Dependencias Manual (Singleton) ---
 // (En un proyecto más grande, esto lo haría un contenedor de Inyección de Dependencias)

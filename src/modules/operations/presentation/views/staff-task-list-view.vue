@@ -151,7 +151,7 @@ import Tooltip from 'primevue/tooltip';
 
 // --- ¡IMPORTAR AMBOS STORES! ---
 import { useOperationsStore } from '../../application/store/Operations.store.js';
-import { usePropertyStore } from '../../../property/application/store/property.store.js'; // ¡Para los cuartos!
+import { usePropertyStore } from '../../../properties/application/store/property.store.js'; // ¡Para los cuartos!
 
 // Hooks
 const { t } = useI18n();

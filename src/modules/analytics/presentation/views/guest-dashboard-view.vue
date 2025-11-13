@@ -206,7 +206,7 @@ const toast = useToast(); // Para 'cancelBooking'
 // --- Instancia el STORE ---
 const store = useAnalyticsStore();
 // (Aquí también necesitaríamos el BookingStore para 'cancelBooking')
-// import { useBookingStore } from '../../../booking/application/Booking.store.js';
+// import { useBookingStore } from '../../../bookings/application/Booking.store.js';
 // const bookingStore = useBookingStore();
 
 // --- Estado local (para el Carousel) ---
@@ -249,18 +249,18 @@ async function loadData() {
 
 // Navegación
 function goToBookings() { router.push({ name: "guest-my-bookings" }); } // Asumiendo que esta ruta existirá
-function goToProperties() { router.push({ name: "guest-rooms-list" }); } // Corregido de 'guest-property-list'
+function goToProperties() { router.push({ name: "guest-rooms-list" }); } // Corregido de 'guest-properties-list'
 function goToRooms() { router.push({ name: 'guest-rooms-list' }); }
 function goToReview() { /* router.push({ name: "guest-review-form" }); */ }
-function goToProperty(propertyId) { /* router.push({ name: "guest-property-details", params: { id: propertyId } }); */ }
-function openBooking(booking) { /* router.push({ name: "guest-booking-details", params: { id: booking.id } }); */ }
+function goToProperty(propertyId) { /* router.push({ name: "guest-properties-details", params: { id: propertyId } }); */ }
+function openBooking(booking) { /* router.push({ name: "guest-bookings-details", params: { id: bookings.id } }); */ }
 function requestService() { console.log("Request service..."); }
 
 // Acciones
 async function cancelBooking(booking) {
   // ESTA ACCIÓN PERTENECE AL 'Booking' Bounded Context.
   // Cuando lo tengas, llamarías a:
-  // await bookingStore.cancelBooking(booking.id);
+  // await bookingStore.cancelBooking(bookings.id);
   // Por ahora, simulamos y recargamos:
   console.warn("Simulando cancelación de reserva (ID:", booking.id, "). Implementar en BookingStore.");
   toast.add({ severity: "success", summary: "Éxito", detail: "Reserva cancelada (simulado)", life: 3000 });

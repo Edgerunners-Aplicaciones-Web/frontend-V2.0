@@ -181,10 +181,10 @@ const store = useAnalyticsStore();
 const userMenu = ref();
 const userMenuItems = computed(() => [ // Convertido a computed para reactividad de i18n
   {
-    label: t('menu.profile'),
+    label: t('menu.profiles'),
     icon: 'pi pi-user-edit',
     command: () => {
-      router.push({ name: 'admin-profile' });
+      router.push({ name: 'admin-profiles' });
     }
   },
   { separator: true },

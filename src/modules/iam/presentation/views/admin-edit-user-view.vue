@@ -8,7 +8,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useIAMStore } from '../../application/store/iam.store.js';
 import { UserApiRepository } from '../../infrastructure/repositories/user-api.repository.js';
-import { ProfileApiRepository } from '../../../profile/infrastructure/repositories/profile-api.repository.js';
+import { ProfileApiRepository } from '../../../profiles/infrastructure/repositories/profile-api.repository.js';
 
 
 // --- Inicializa hooks ---
@@ -59,7 +59,7 @@ onMounted(async () => {
       editableProfileData.value = { user_id: parseInt(userId.value) };
     }
   } catch (error) {
-    console.error("Error loading user/profile data:", error);
+    console.error("Error loading user/profiles data:", error);
   } finally {
     loading.value = false;
   }

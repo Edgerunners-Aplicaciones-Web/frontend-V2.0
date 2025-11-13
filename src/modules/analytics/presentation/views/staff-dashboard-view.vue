@@ -162,7 +162,7 @@ import LanguageSwitcher from '../../../../shared/presentation/components/languag
 
 // --- Importa los DOS STORES ---
 import { useAnalyticsStore } from '../../application/store/analytics.store.js'; // Ruta Corregida
-import { usePropertyStore } from '../../../property/application/store/property.store.js'; // Ruta Corregida
+import { usePropertyStore } from '../../../properties/application/store/property.store.js'; // Ruta Corregida
 
 // --- Inicializa hooks ---
 const { t } = useI18n();
@@ -187,7 +187,7 @@ const chartOptions = ref({
   plugins: { legend: { display: false } }
 });
 const menuItems = computed(() => [ // Convertido a computed
-  { label: t('menu.profile'), icon: 'pi pi-user', command: () => goToProfile() },
+  { label: t('menu.profiles'), icon: 'pi pi-user', command: () => goToProfile() },
   { label: t('menu.tasks'), icon: 'pi pi-check-square', command: () => goToTasks() },
   { label: t('menu.assignedRooms'), icon: 'pi pi-key', command: () => goToRooms() },
 ]);
@@ -269,7 +269,7 @@ function logout() {
 }
 function reportIssue() { toast.add({ severity: 'info', summary: t('staffDashboard.issueReported'), detail: t('staffDashboard.notifyMaintenance'), life: 3000 }); }
 function requestSupplies() { toast.add({ severity: 'info', summary: t('staffDashboard.suppliesRequested'), detail: t('staffDashboard.notifyHousekeeping'), life: 3000 }); }
-function goToProfile() { /* router.push({ name: 'staff-profile' }); */ }
+function goToProfile() { /* router.push({ name: 'staff-profiles' }); */ }
 function goToTasks() { router.push({ name: 'staff-task-list' }); }
 function goToRooms() { router.push({ name: 'staff-room-cleaning' }); }
 
