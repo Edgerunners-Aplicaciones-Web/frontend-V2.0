@@ -1,7 +1,7 @@
 // Esta es una consulta compleja (Query) que cruza contextos (IAM y Property)
 // Es normal que inyecte repositorios de diferentes dominios.
 
-import { IUserRepository } from '../domain/repositories/i-user-repository.js';
+import { IUserRepository } from '../../iam/domain/repositories/i-user-repository.js';
 import { IProfileRepository } from '../domain/repositories/i-profile-repository.js';
 //TODO: Descomentar cuando el contexto Property esté implementado
 //import { IPropertyRepository } from '../../property/domain/repositories/IPropertyRepository.js';

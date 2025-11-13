@@ -5,7 +5,7 @@ import RegisterView from "./views/register-view.vue";
 import AdminManageUsers from './views/admin-manage-users-view.vue';
 import AdminEditUser from './views/admin-edit-user-view.vue';
 import AdminAddUser from "./views/admin-add-user-view.vue";
-import AdminProfile from "./views/admin-profile-view.vue";
+import AdminProfile from "../../profile/presentation/views/admin-profile-view.vue";
 
 export const iamRoutes = [
     {

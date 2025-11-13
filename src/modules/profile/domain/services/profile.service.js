@@ -1,4 +1,4 @@
-import { UserApiRepository } from '../../infrastructure/repositories/user-api.repository.js';
+import { UserApiRepository } from '../../../iam/infrastructure/repositories/user-api.repository.js';
 import { ProfileApiRepository } from '../../infrastructure/repositories/profile-api.repository.js';
 
 export class ProfileService {

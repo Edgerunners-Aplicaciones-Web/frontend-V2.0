@@ -8,7 +8,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useIAMStore } from '../../application/store/iam.store.js';
 import { UserApiRepository } from '../../infrastructure/repositories/user-api.repository.js';
-import { ProfileApiRepository } from '../../infrastructure/repositories/profile-api.repository.js';
+import { ProfileApiRepository } from '../../../profile/infrastructure/repositories/profile-api.repository.js';
 
 
 // --- Inicializa hooks ---

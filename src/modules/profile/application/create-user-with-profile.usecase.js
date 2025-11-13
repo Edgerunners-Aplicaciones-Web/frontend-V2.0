@@ -1,6 +1,6 @@
-import { IAMService } from '../domain/services/IAM.service.js';
-import { User } from '../domain/model/User.entity.js';
-import { Profile } from '../domain/model/Profile.entity.js';
+import { IAMService } from '../../iam/domain/services/iam.service.js';
+import { User } from '../../iam/domain/model/user.entity.js';
+import { Profile } from '../domain/model/profile.entity.js';
 
 export class CreateUserWithProfileUseCase {
     /**
